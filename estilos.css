@@ -1,0 +1,20 @@
+.Grafico{
+	width: 60px;		
+}
+.node circle {
+	  cursor: pointer;
+	  stroke: #3182bd;
+	  stroke-width: 1.5px;
+}
+
+.node text {
+	  font: 10px sans-serif;
+	  pointer-events: none;
+	  text-anchor: middle;
+}
+
+line.link {
+	  fill: none;
+	  stroke: red;
+	  stroke-width: 1.5px;
+}
