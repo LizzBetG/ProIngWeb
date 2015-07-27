@@ -66,7 +66,7 @@
                     <li><a href="#home" class="selected menu_01">Home</a></li>
                     <li><a href="#aboutus" class="menu_02">Diagrama de Barras</a></li>
                     <li><a href="#services" class="menu_03">Circulares</a></li>
-                    <li><a href="#gallery" class="menu_04">Gallery</a></li>
+                    <li><a href="#gallery" class="menu_04">Búsqueda </a></li>
                     <li><a href="#contactus" class="menu_05">Contact</a></li>
                 </ul>
             </div>
@@ -91,12 +91,6 @@
                 </div>
                 <div class="content_section last_section">
                   <h2>Servicio</h2>
-                  <!-- <ul class="service_list">
-                    <li><a href="#" class="service_one">Maecenas suscipit vulputate dui vel adipiscing</a></li>
-                    <li><a href="#" class="service_two">Pellentesque habitant morbi tristique senectus</a></li>
-                    <li><a href="#" class="service_three">Duis at sapien ut sapien commodo molestie</a></li>
-                    <li><a href="#" class="service_four">Nam porttitor quam eu ante aliquam eu</a></li>
-                    <li><a href="#" class="service_five">Maecenas posuere fringilla ipsum ut pretium</a></li>
                   </ul> -->
                   <p align="justify">
                     Para el presente proyecto se a tomado el web services que proporciona la UTPL a los estudiantes para la realización de sus trabajos de fin de ciclo.
@@ -219,149 +213,171 @@
               <div class="panel" id="services">
                 <h1>Circular</h1>
                <p>
-                 Esta visualizacion representa que cada circulo es determinado por el precio de financiacion de la UTPL.
+                 Esta visualizacion representa que cada circulo es determinado por el precio de financiación de la UTPL.
                </p>
 				
                 <div class="cleaner_h20"></div>
 				        <div class="circular"></div>
-                <!-- <ul class="service_list">
-                  <li><a href="#" class="service_one">Maecenas suscipit vulputate dui vel adipiscing</a></li>
-                  <li><a href="#" class="service_two">Pellentesque habitant morbi tristique senectus</a></li>
-                  <li><a href="#" class="service_three">Duis at sapien ut sapien commodo molestie</a></li>
-                  <li><a href="#" class="service_four">Nam porttitor quam eu ante aliquam eu</a></li>
-                  <li><a href="#" class="service_five">Maecenas posuere fringilla ipsum ut pretium</a></li>
-                </ul> -->
- <script>
-          var width = 550,
-              height = 500,
-              root;
+  
+<script>
+  var width = 560,
+      height = 500,
+      root;
 
-            var force = d3.layout.force()
-              .linkDistance(80)
-              .charge(-10)
-              .gravity(.05)
-              .size([width, height])
-              .on("tick", tick);
+    var force = d3.layout.force()
+      .linkDistance(80)
+      .charge(-10)
+      .gravity(.05)
+      .size([width, height])
+      .on("tick", tick);
 
-            var svg = d3.select(".circular").append("svg")
-              .attr("width", width)
-              .attr("height", height);
+    var svg = d3.select(".circular").append("svg")
+      .attr("width", width)
+      .attr("height", height);
 
-            var link = svg.selectAll(".link"),
-              node = svg.selectAll(".node");
+    var link = svg.selectAll(".link"),
+      node = svg.selectAll(".node");
 
-           d3.json("flare.json", function(error, json) {
-              if (error) throw error;
-              root = json;
-              update();
-          });
+   d3.json("flare.json", function(error, json) {
+      if (error) throw error;
+      root = json;
+      update();
+  });
 
-           function update(){
-              var nodes = flatten(root),
-                  links = d3.layout.tree().links(nodes);
-                 force
-                   .nodes(nodes)
-                   .links(links)
-                   .start();
-                  //actualiza links
-            link = link.data(links, function(d) { return d.target.id; });
-            console.log(link);
-              link.exit().remove(); 
+   function update(){
+      var nodes = flatten(root),
+          links = d3.layout.tree().links(nodes);
+         force
+           .nodes(nodes)
+           .links(links)
+           .start();
+          //actualiza links
+    link = link.data(links, function(d) { return d.target.id; });
+    console.log(link);
+      link.exit().remove(); 
 
-              link.enter().insert("line", ".node")
-                .attr("class", "link");
-        //actualkzia nosodos
-              node = node.data(nodes, function(d) { return d.id; });
-              node.exit().remove();   
+      link.enter().insert("line", ".node")
+        .attr("class", "link");
+//actualkzia nosodos
+      node = node.data(nodes, function(d) { return d.id; });
+      node.exit().remove();   
 
-              var nodeEnter = node.enter().append("g")
-                .attr("class", "node")
-                .on("click", click)
-                .call(force.drag);
-            
-            
-            nodeEnter.append("circle")
-                  .attr("r", function(d) { 
-                  //  return d.utpl_finance); 
-                  return Math.sqrt(d.utpl_finance) / 10 || 4.5;
-                });
+      var nodeEnter = node.enter().append("g")
+        .attr("class", "node")
+        .on("click", click)
+        .call(force.drag);
 
-            nodeEnter.append("text")
-                .attr("dy", ".35em")
-                .text(function(d) { 
-                  return d.id; });
-            node.select("circle")
-                  .style("fill", color);
-           }//fin actualizar
-           function tick() {
-              link.attr("x1", function(d) { return d.source.x; })
-                .attr("y1", function(d) { return d.source.y; })
-                .attr("x2", function(d) { return d.target.x; })
-                .attr("y2", function(d) { return d.target.y; });
+    nodeEnter.append("circle")
+          .attr("r", function(d) { 
+          //  return d.utpl_finance); 
+          return Math.sqrt(d.utpl_finance) / 10 || 4.5;
+        });
 
-              node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
-          }//fin tick
-          function color(d) {
-            return d._proyectos ? "#040A22" // collapsed package
-                : d.proyectos ? "#F0B0B0" // expanded package
-                : "#AFEA5D"; // leaf node
-          }
+    nodeEnter.append("text")
+        .attr("dy", ".35em")
+        .text(function(d) { 
+          return d.id; });
+    node.select("circle")
+          .style("fill", color);
+   }//fin actualizar
+   function tick() {
+      link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
 
-          function click(d) {
-            if (d3.event.defaultPrevented) return; // ignore drag
-                if (d.children) {
-                  d._children = d.children;
-                  d.children = null;
-                } 
-                else {
-                  d.children = d._children;
-                  d._children = null;
-                }
-              update();
-          }
+      node.attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+  }//fin tick
+  function color(d) {
+    return d._proyectos ? "#040A22" // collapsed package
+        : d.proyectos ? "#F0B0B0" // expanded package
+        : "#AFEA5D"; // leaf node
+  }
 
-          function flatten(root) {
-            var nodes = [], i = 0;
+  function click(d) {
+    if (d3.event.defaultPrevented) return; // ignore drag
+        if (d.children) {
+          d._children = d.children;
+          d.children = null;
+          
+        } 
+        else {
+          d.children = d._children;
+          d._children = null;
+        }
 
-            function recurse(node) {
-                if (node.proyectos) node.proyectos.forEach(recurse);
-                if (!node.participantes) 
-                  //va id
-                  node.participantes = ++i;
-                  nodes.push(node);
-              }
+        window.alert("Id \n: "+d.id +
+          "\n\nNombre \n "+d.project_name+
+          "\n\nTipo Proyecto \n"+d.project_type+
+          "\n\nFinanciamiento utpl $ "+d.utpl_finance+  
+          "\n\nAño : \n"+d.year
+          );
 
-              recurse(root);
-              return nodes;
+      update();
+  }
+
+  function flatten(root) {
+    var nodes = [], i = 0;
+
+    function recurse(node) {
+        if (node.proyectos) node.proyectos.forEach(recurse);
+        if (!node.participantes) 
+          //va id
+          node.participantes = ++i;
+          nodes.push(node);
+      }
+
+      recurse(root);
+      return nodes;
   } 
 
-</script>
+</script>                
 
               </div> <!-- end of services -->
 			  
               <div class="panel" id="gallery">
-                <h1>Our Galleries</h1>
-                <div id="gallery_container">
-                  <div class="gallery_box float_l">
-                    <h4>Project One</h4>
-                    <a href="#"><img src="images/gallery/image_01.jpg" alt="Project 1" /></a> </div>
-                  <div class="gallery_box float_r">
-                    <h4>Project Two</h4>
-                    <a href="#"><img src="images/gallery/image_02.jpg" alt="Project 2" /></a> </div>
-                  <div class="gallery_box float_l">
-                    <h4>Project Three</h4>
-                    <a href="#"><img src="images/gallery/image_03.jpg" alt="Project 3" /></a> </div>
-                  <div class="gallery_box float_r">
-                    <h4>Project Four</h4>
-                    <a href="#"><img src="images/gallery/image_04.jpg" alt="Project 4" /></a> </div>
-                  <div class="gallery_box float_l">
-                    <h4>Project Five</h4>
-                    <a href="#"><img src="images/gallery/image_05.jpg" alt="Project 5" /></a> </div>
-                  <div class="gallery_box float_r">
-                    <h4>Project Six</h4>
-                    <a href="#"><img src="images/gallery/image_06.jpg" alt="Project 6" /></a> </div>
-                  <div class="cleaner"></div>
-                </div>
+                <h1>Búsquedas por año</h1>
+                <input type="text" id="b">
+                <input type="button" id="buscar" value="Buscar">
+                <div id="imagenes"></div>
+                <script src="jquery.js"></script>
+<script>
+  $(document).on("ready",main);
+    function main(){
+      $("#buscar").on("click",function(){
+        var texto="";
+        var tag=$("#b").val();
+        $("#imagenes").text("Cargando...");
+        $.getJSON("http://carbono.utpl.edu.ec:8080/RESTFUL_SICA/webresources/entidades.proyectos/listar?jsoncallback=?",function(datos){
+          $.each(datos.proyectos, function(i, item){
+            if (tag == item.year) {
+              texto +="<div class='cuadro'>";  
+              texto +="<table>" +
+                            "<tr>"+
+                              "<td> <strong>Id :</strong> </td>"+
+                              "<td> <strong>Nombre Proyecto :</strong> </td>"+
+                              "<td> <strong>Año :</strong> </td>"+
+                            "</tr>"+                          
+                            "<tr>"+
+                                "<td>"+item.id+"</td>"+
+                                "<td>"+item.project_name+"</td>"+
+                                "<td>"+item.year+"</td>"+
+                             "</tr>"+                              
+                      "</table>";
+                            texto +="</div>";
+            }
+            else{
+              alert("No existen proyectos del año "+tag);
+            };            
+          });
+          $("#imagenes").html(texto);
+        });
+      });
+    }
+</script>
+
+
+                
               </div>
 			  
               <div class="panel" id="contactus">
